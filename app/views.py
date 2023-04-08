@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate,login ,logout
 from django.db.models import Q
 # Create your views here.
 def index(request):
-    posts = Post.objects.filter(Q(profile__followers=request.user) & ~Q(likes=request.user))
+    posts = Post.objects.filter(Q(profile__followers=request.user) )#& ~Q(likes=request.user))
     context = {"posts":posts}
     return render(request,'Index.html',context)
 

@@ -26,17 +26,7 @@
     {% include 'navbar.html' %}
     <main>
       <div class="post_story">
-        <div class="stories">
-          <!-- USER STORIES STARTS HERE -->
-
-          {% for story in stories %}
-
-          <div class="story">
-            <img src="{{story.story.url}}" alt="" id="story_image" />
-          </div>
-          {% endfor %}
-          <!-- USER STORIES ENDS HERE -->
-        </div>
+        
         <div class="posts">
           <!-- USER POSTS STARTS HERE -->
           {% for post in posts %}
@@ -87,7 +77,9 @@
                   ></path>
                 </svg>
               </a>
+
             </div>
+            <p href="{{post.description}}" id="description" class="description">{{post.description}} </p>
           </div>
           {% endfor %}
           <!-- USER POST ENDS HERE -->

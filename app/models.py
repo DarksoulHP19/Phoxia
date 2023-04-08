@@ -12,5 +12,6 @@ class Profile(models.Model):
 class Post(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     Wallpaper = models.ImageField(upload_to='posts')
+    description = models.TextField(blank=True)
     likes = models.ManyToManyField(User,related_name="likes",blank=True)
     profile = models.ForeignKey(Profile,on_delete=models.CASCADE)
