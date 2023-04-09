@@ -5,11 +5,16 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Instagram Clone</title>
+    <title>Phoxia app</title>
     <link rel="stylesheet" href="{% static './css/index.css' %}" />
-    <link
+    <!-- <link
       rel="shortcut icon"
       href="{% static './images/favicon.ico' %}"
+      type="image/x-icon"
+    /> -->
+    <link
+      rel="Shortcut Icon"
+      href="{% static './images/favicon1.ico' %}"
       type="image/x-icon"
     />
     <link
@@ -20,13 +25,10 @@
     />
   </head>
   <body>
-    <div class="main_story">
-      <img src="./images/CSS IN ONE VIDOE.png" alt="" id="story" />
-    </div>
+ 
     {% include 'navbar.html' %}
     <main>
       <div class="post_story">
-        
         <div class="posts">
           <!-- USER POSTS STARTS HERE -->
           {% for post in posts %}
@@ -41,6 +43,7 @@
               <h4 id="post_user">{{post.profile.user}}</h4>
             </div>
             <img src="{{post.Wallpaper.url}}" alt="" id="user_post" />
+            <hr />
             <div class="lower">
               <a href="/like/{{post.id}}" id="like">
                 <svg
@@ -59,6 +62,7 @@
                 </svg>
               </a>
               {{post.likes.count}}
+
               <a href="" id="comment">
                 <svg
                   aria-label="Comment"
@@ -78,8 +82,22 @@
                 </svg>
               </a>
 
+              {%if post.Wallpaper %}
+              <a href="{{post.Wallpaper.url}}" download> Download</a>
+
+              {% endif %}
             </div>
-            <p href="{{post.description}}" id="description" class="description">{{post.description}} </p>
+            <hr />
+
+            {% if post.description %}
+            <p href="{{post.description}}" id="description" class="description">
+              
+              {{post.description}}
+
+            </p>
+            {% endif %}
+      
+            <hr />
           </div>
           {% endfor %}
           <!-- USER POST ENDS HERE -->

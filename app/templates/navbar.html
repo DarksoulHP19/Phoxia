@@ -34,35 +34,24 @@
         <img src="{% static './images/add (1).PNG' %}" alt="" />
       </a>
     </li>
-    <!-- <li id="reel" class="nav-item dropdown">
-      <a
-        class="nav-link dropdown-toggle"
-        href="#"
-        id="navbarDropdown"
-        role="button"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-      >
-        <img src="{% static './images/reel.png' %}" alt="" />
-      </a>
-
-      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <li>
-          <a
-            class="dropdown-item"
-            href="/upload_reel
-              "
-            >Upload Reel</a
-          >
-        </li>
-        <li>
-          <a class="dropdown-item" href="/reels">Explore Reels</a>
-        </li>
-      </ul>
-    </li> -->
+   
     <li id="profile">
       <a href="/profile"><img src="{{profileimage}}" alt="" id="profile" /> </a>
     </li>
   </ul>
-  <h5>{{request.user}}</h5>
+  <h5>
+    {{request.user}}
+  </h5>
+
+  <div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      profile
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <a class="dropdown-item" href="/profile">profile</a>
+      <a class="dropdown-item" href="/login">login in to another account
+      </a>
+      <a class="dropdown-item" href="/logout">Logout</a>
+    </div>
+  </div>
 </nav>
