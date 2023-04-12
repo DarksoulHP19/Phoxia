@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from taggit.managers import TaggableManager
 
 # Create your models here.
 class Profile(models.Model):
@@ -15,4 +16,8 @@ class Post(models.Model):
     description = models.TextField(blank=True)
     likes = models.ManyToManyField(User,related_name="likes",blank=True)
     profile = models.ForeignKey(Profile,on_delete=models.CASCADE)
+    
+    tags =TaggableManager()
+    # comments = models.TextField(blank=True)
     # download = models.ManyToManyField(User,related_name="downloads")
+

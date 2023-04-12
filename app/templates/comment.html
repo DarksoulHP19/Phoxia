@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="/blog/comment/" method="post" class="mb-6">
+          <input type="hidden" name="csrfmiddlewaretoken" value="4agwRu1sCw4uqM6tUE9e7riLpteeWwDRHIeGfNOr0vDZL7iVUvKTOIvigA3Rhpcy">
+          <div class="py-2 px-4 mb-4 shadow rounded-lg rounded-t-lg border-2 border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+            <label for="comment" class="sr-only">Your comment</label>
+            <textarea id="comment" name="comment" rows="6" class="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 dark:text-white dark:placeholder-gray-400 dark:bg-gray-800" placeholder="Write a comment..." required=""></textarea>
+          </div>
+
+          <input type="hidden" name="slug" value="django-setup">
+          <input type="hidden" name="parent" value="">
+          <input type="hidden" name="username" value="nilesh">
+          <button type="submit" class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-green-600 rounded-lg focus:ring-4 focus:ring-green-200 dark:focus:ring-green-900 hover:bg-green-800">
+            Post comment
+          </button>
+        </form>
+</body>
+</html>

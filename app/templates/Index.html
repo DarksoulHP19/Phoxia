@@ -31,7 +31,7 @@
       <div class="post_story">
         <div class="posts">
           <!-- USER POSTS STARTS HERE -->
-          {% for post in posts %}
+        {% for post in posts %}
 
           <div id="post">
             <div id="post_header">
@@ -62,7 +62,7 @@
                 </svg>
               </a>
               {{post.likes.count}}
-
+<!-- 
               <a href="" id="comment">
                 <svg
                   aria-label="Comment"
@@ -80,7 +80,7 @@
                     fill-rule="evenodd"
                   ></path>
                 </svg>
-              </a>
+              </a> -->
 
               {%if post.Wallpaper %}
               <a href="{{post.Wallpaper.url}}" download> Download</a>
@@ -99,7 +99,7 @@
       
             <hr />
           </div>
-          {% endfor %}
+        {% endfor %}
           <!-- USER POST ENDS HERE -->
         </div>
       </div>

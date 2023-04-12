@@ -37,8 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #tags
+    'taggit',
     #own
     'app',
+    'django_extensions'
 
 ]
 
@@ -127,3 +130,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR/'media/'
+TAGGIT_CASE_INSENSITIVE = True

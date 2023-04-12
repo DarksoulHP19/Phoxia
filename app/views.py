@@ -9,6 +9,7 @@ from django.db.models import Q
 def index(request):
     posts = Post.objects.filter(Q(profile__followers=request.user)) #&~Q(likes=request.user) )    
     context = {"posts":posts}
+    # return render(request,'base.html',context)
     return render(request,'Index.html',context)
 
 #for login 
@@ -96,9 +97,25 @@ def like_post(request,id):
         post[0].likes.add(request.user)
     return redirect("index")
 
+#for commenting on post
+# def  comment_post(request,id):
+#     post = Post.objects.filter(id=id)
+#     if request.method == 'POST':
+#         comment = request.POST['comment']
+#         post.comments = comment
+#         post.save()
+#         return render(request,'Comment.html')
+#     return redirect("index")
+
 #downloading the post
 def download_post(request, id):
     post = get_object_or_404(Post, id=id)
     response = HttpResponse(post.Wallpaper, content_type='application/force-download')
     response ['Content-Disposition'] = f'attachment; filename="{post.Wallpaper.name}"'
     return response
+
+
+
+#for subscription
+# def subscription(request):
+#     return render(request,'subscription.html')
