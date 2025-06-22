@@ -9,63 +9,292 @@
 
     <!-- ✅ Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            animation: {
+              'gradient': 'gradient 8s ease infinite',
+              'float': 'float 6s ease-in-out infinite',
+            },
+            keyframes: {
+              'gradient': {
+                '0%, 100%': {
+                  'background-size': '200% 200%',
+                  'background-position': 'left center'
+                },
+                '50%': {
+                  'background-size': '200% 200%',
+                  'background-position': 'right center'
+                },
+              },
+              'float': {
+                '0%, 100%': { transform: 'translateY(0px)' },
+                '50%': { transform: 'translateY(-20px)' },
+              }
+            }
+          }
+        }
+      }
+    </script>
     <link rel="stylesheet" href="{% static './css/index.css' %}" />
     <link rel="shortcut icon" href="{% static './images/favicon1.ico' %}" type="image/x-icon" />
   </head>
-  <body class="bg-gray-100 text-gray-900">
+  <body class="bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white min-h-screen">
 
-    {% include 'navbar.html' %}
+    <!-- Navbar -->
+    {% load static %}
+    <nav class="bg-white shadow-lg px-4 py-4 md:px-8 relative z-50">
+      <div class="max-w-7xl mx-auto flex items-center justify-between flex-wrap">
+        <!-- Logo -->
+        <div class="flex items-center">
+          <p class="text-3xl font-extrabold bg-gradient-to-r from-gray-700 via-purple-800 to-indigo-900 text-transparent bg-clip-text tracking-tight">Phoxia</p>
+        </div>
 
-    <main class="container mx-auto px-4 py-6">
-      <div class="grid gap-6">
-        <!-- USER POSTS START HERE -->
-        {% for post in posts %}
-        <div class="bg-white shadow-md rounded-lg overflow-hidden">
-          <!-- Post Header -->
-          <div class="flex items-center gap-4 px-4 py-3 border-b">
-            <img
-              src="{{ post.profile.profile_picture.url }}"
-              alt="User Profile"
-              class="w-10 h-10 rounded-full object-cover"
-            />
-            <h4 class="text-sm font-medium text-gray-800">{{ post.profile.user }}</h4>
+        <!-- Toggle Checkbox -->
+        <input type="checkbox" id="menu-toggle" class="hidden peer/menu" />
+
+        <!-- Hamburger Icon -->
+        <label for="menu-toggle" class="md:hidden block cursor-pointer text-gray-700 hover:text-gray-900 transition-all duration-300">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </label>
+
+        <!-- Dark Overlay (mobile only) -->
+        <label for="menu-toggle" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden peer-checked/menu:block md:hidden"></label>
+
+        <!-- Sidebar Menu -->
+        <div class="fixed top-0 right-0 h-full w-64 bg-white shadow-xl translate-x-full peer-checked/menu:translate-x-0 transition-transform duration-300 ease-in-out md:static md:w-auto md:h-auto md:shadow-none md:translate-x-0 md:flex md:items-center md:justify-between md:flex-row md:space-x-8 z-50">
+
+          <!-- Close button (mobile only) -->
+          <div class="p-6 md:hidden flex justify-end">
+            <label for="menu-toggle" class="cursor-pointer text-gray-700 hover:text-gray-900 transition-all duration-300">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </label>
           </div>
 
-          <!-- Post Image -->
-          <img src="{{ post.Wallpaper.url }}" alt="Post Image" class="w-full max-h-[500px] object-cover" />
-
-          <!-- Actions -->
-          <div class="flex items-center justify-between px-4 py-2">
-            <div class="flex items-center gap-3">
-              <a href="/like/{{ post.id }}" aria-label="Like" class="hover:scale-105 transition-transform">
-                <svg
-                  class="w-6 h-6 text-gray-500 hover:text-red-500 transition-colors"
-                  fill="#262626"
-                  viewBox="0 0 48 48"
-                  xmlns="http://www.w3.org/2000/svg"
+          <!-- Menu Content -->
+          <div class="flex flex-col md:flex-row items-center gap-6 md:gap-8 px-6 md:px-0 pb-6 md:pb-0 w-full">
+            
+            <!-- Navigation Links for Non-Logged Users -->
+            {% if not user.is_authenticated %}
+              <!-- Login and Signup Buttons -->
+              <div class="flex flex-col md:flex-row items-center gap-4 md:gap-6 mt-6 md:mt-0 w-full md:w-auto">
+                <a href="/login" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full font-semibold shadow-md transition-all duration-300 transform hover:scale-105 active:scale-95 w-full md:w-auto text-center">
+                  Login
+                </a>
+                <a href="/signup" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-full font-semibold shadow-md transition-all duration-300 transform hover:scale-105 active:scale-95 w-full md:w-auto text-center">
+                  Sign Up
+                </a>
+              </div>
+            {% else %}
+              <!-- Logged-in User Navigation -->
+              <!-- Search -->
+              <form action="/search" method="GET" class="flex items-center space-x-3 w-full md:w-auto">
+                <input
+                  type="text"
+                  name="username"
+                  placeholder="Search Phoxia..."
+                  class="w-full md:min-w-[250px] lg:min-w-[300px] px-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200 placeholder-gray-400 text-gray-700"
+                />
+                <button
+                  type="submit"
+                  class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-full font-semibold shadow-md transition-all duration-300 transform hover:scale-105 active:scale-95 flex-shrink-0"
                 >
-                  <path d="M34.6 6.1c5.7 0 10.4 5.2 10.4 11.5 0 6.8-5.9 11-11.5 16S25 41.3 24 41.9c-1.1-.7-4.7-4-9.5-8.3-5.7-5-11.5-9.2-11.5-16C3 11.3 7.7 6.1 13.4 6.1c4.2 0 6.5 2 8.1 4.3 1.9 2.6 2.2 3.9 2.5 3.9.3 0 .6-1.3 2.5-3.9 1.6-2.3 3.9-4.3 8.1-4.3z"/>
-                </svg>
-              </a>
-              <span class="text-sm text-gray-600">{{ post.likes.count }}</span>
-            </div>
+                  Search
+                </button>
+              </form>
 
-            {% if post.Wallpaper %}
-              <a href="{{ post.Wallpaper.url }}" download class="text-sm text-blue-600 hover:underline">Download</a>
+              <!-- Navigation Icons -->
+              <div class="flex flex-col md:flex-row items-center gap-6 md:gap-8 mt-6 md:mt-0 w-full md:w-auto">
+                <a href="/" class="group">
+                  <svg class="w-7 h-7 text-gray-700 group-hover:text-black transition-all duration-300 transform group-hover:scale-110" fill="#262626" viewBox="0 0 48 48">
+                    <path d="M45.5 48H30.1c-.8 0-1.5-.7-1.5-1.5V34.2c0-2.6-2.1-4.6-4.6-4.6s-4.6 2.1-4.6 4.6v12.3c0 .8-.7 1.5-1.5 1.5H2.5c-.8 0-1.5-.7-1.5-1.5V23c0-.4.2-.8.4-1.1L22.9.4c.6-.6 1.6-.6 2.1 0l21.5 21.5c.3.3.4.7.4 1.1v23.5c.1.8-.6 1.5-1.4 1.5z"/>
+                  </svg>
+                </a>
+
+                <a href="/uploadpost" class="group">
+                  <img src="{% static './images/add (1).PNG' %}" alt="Upload" class="w-7 h-7 object-contain transition-all duration-300 transform group-hover:scale-110" />
+                </a>
+
+                <a href="/profile" class="flex items-center group">
+                  {% if profile.profile_picture %}
+                    <img
+                      src="{{ profile.profile_picture.url }}"
+                      alt="Profile Picture"
+                      class="w-9 h-9 rounded-full object-cover border-2 border-gray-300 group-hover:border-blue-500 transition-all duration-300 transform group-hover:scale-110"
+                    />
+                  {% else %}
+                    <img
+                      src="{% static './images/default_profile.png' %}"
+                      alt="Default Profile Picture"
+                      class="w-9 h-9 rounded-full object-cover border-2 border-gray-300 group-hover:border-blue-500 transition-all duration-300 transform group-hover:scale-110"
+                    />
+                  {% endif %}
+                </a>
+
+                <a href="/logout" class="bg-red-500 text-white px-5 py-2 rounded-full font-semibold text-base shadow-md hover:bg-red-600 transition-all duration-300 transform hover:scale-105 active:scale-95 w-full md:w-auto text-center">
+                  Logout
+                </a>
+              </div>
             {% endif %}
           </div>
-
-          <!-- Description -->
-          {% if post.description %}
-          <div class="px-4 pb-4">
-            <p class="text-sm text-gray-700">{{ post.description }}</p>
-          </div>
-          {% endif %}
         </div>
-        {% endfor %}
-        <!-- USER POSTS END HERE -->
       </div>
-    </main>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-r from-purple-600/20 via-pink-600/20 to-blue-600/20 animate-gradient"></div>
+      <div class="container mx-auto px-4 py-20 relative z-10">
+        <div class="text-center max-w-4xl mx-auto">
+          <h1 class="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-transparent animate-float">
+            Welcome to Phoxia
+          </h1>
+          <p class="text-xl md:text-2xl mb-8 text-gray-200 leading-relaxed">
+            Discover, create, and share stunning wallpapers with a vibrant community of artists and creators
+          </p>
+          <button onclick="window.location.href='/signup'" class="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-4 px-8 rounded-full text-lg transform hover:scale-105 transition-all duration-300 shadow-2xl hover:shadow-pink-500/25">
+            Start Creating Today
+          </button>
+        </div>
+      </div>
+      
+      <!-- Floating Elements -->
+      <div class="absolute top-20 left-10 w-20 h-20 bg-pink-500/20 rounded-full blur-xl animate-float" style="animation-delay: -2s;"></div>
+      <div class="absolute bottom-20 right-10 w-32 h-32 bg-blue-500/20 rounded-full blur-xl animate-float" style="animation-delay: -4s;"></div>
+      <div class="absolute top-1/2 left-1/4 w-16 h-16 bg-purple-500/20 rounded-full blur-xl animate-float" style="animation-delay: -1s;"></div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-20 bg-gradient-to-r from-gray-900/50 to-black/30 backdrop-blur-sm">
+      <div class="container mx-auto px-4">
+        <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+          Why Choose Phoxia?
+        </h2>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <!-- Feature 1 -->
+          <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-2 shadow-2xl border border-white/20">
+            <div class="w-16 h-16 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full flex items-center justify-center mb-6 mx-auto">
+              <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-4 text-center">Create Stunning Art</h3>
+            <p class="text-gray-300 text-center leading-relaxed">Design and upload beautiful wallpapers with our intuitive tools and creative community support.</p>
+          </div>
+
+          <!-- Feature 2 -->
+          <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-2 shadow-2xl border border-white/20">
+            <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-full flex items-center justify-center mb-6 mx-auto">
+              <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-4 text-center">Join the Community</h3>
+            <p class="text-gray-300 text-center leading-relaxed">Connect with talented artists, share feedback, and discover inspiration from creators worldwide.</p>
+          </div>
+
+          <!-- Feature 3 -->
+          <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-2 shadow-2xl border border-white/20">
+            <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-teal-600 rounded-full flex items-center justify-center mb-6 mx-auto">
+              <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-4 text-center">Easy Downloads</h3>
+            <p class="text-gray-300 text-center leading-relaxed">Download high-quality wallpapers instantly with one click for all your devices and screens.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Community Creations Section -->
+    <section class="py-16 bg-gradient-to-b from-black/30 to-gray-900/50">
+      <div class="container mx-auto px-4">
+        <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-pink-400 to-blue-400 bg-clip-text text-transparent">
+          Community Creations
+        </h2>
+        <p class="text-xl text-gray-300 text-center mb-16 max-w-2xl mx-auto">
+          Explore amazing wallpapers created by our talented community members
+        </p>
+
+        <div class="grid gap-8 max-w-4xl mx-auto">
+          <!-- USER POSTS START HERE -->
+          {% for post in posts %}
+          <div class="bg-white/10 backdrop-blur-lg rounded-2xl overflow-hidden shadow-2xl border border-white/20 hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-1">
+            <!-- Post Header -->
+            <div class="flex items-center gap-4 px-6 py-4 border-b border-white/20">
+              <img
+                src="{{ post.profile.profile_picture.url }}"
+                alt="User Profile"
+                class="w-12 h-12 rounded-full object-cover border-2 border-pink-400 shadow-lg"
+              />
+              <h4 class="text-lg font-semibold text-white">{{ post.profile.user }}</h4>
+            </div>
+
+            <!-- Post Image -->
+            <div class="relative overflow-hidden">
+              <img src="{{ post.Wallpaper.url }}" alt="Post Image" class="w-full max-h-[500px] object-cover hover:scale-105 transition-transform duration-500" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex items-center justify-between px-6 py-4">
+              <div class="flex items-center gap-4">
+                <a href="/like/{{ post.id }}" aria-label="Like" class="group flex items-center gap-2 hover:scale-105 transition-transform">
+                  <div class="p-2 rounded-full bg-gradient-to-r from-pink-500/20 to-red-500/20 group-hover:from-pink-500/40 group-hover:to-red-500/40 transition-all duration-300">
+                    <svg
+                      class="w-6 h-6 text-pink-400 group-hover:text-pink-300 transition-colors"
+                      fill="currentColor"
+                      viewBox="0 0 48 48"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M34.6 6.1c5.7 0 10.4 5.2 10.4 11.5 0 6.8-5.9 11-11.5 16S25 41.3 24 41.9c-1.1-.7-4.7-4-9.5-8.3-5.7-5-11.5-9.2-11.5-16C3 11.3 7.7 6.1 13.4 6.1c4.2 0 6.5 2 8.1 4.3 1.9 2.6 2.2 3.9 2.5 3.9.3 0 .6-1.3 2.5-3.9 1.6-2.3 3.9-4.3 8.1-4.3z"/>
+                    </svg>
+                  </div>
+                  <span class="text-sm text-gray-300 font-medium">{{ post.likes.count }}</span>
+                </a>
+              </div>
+
+              {% if post.Wallpaper %}
+                <a href="{{ post.Wallpaper.url }}" download class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-2 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg">
+                  Download
+                </a>
+              {% endif %}
+            </div>
+
+            <!-- Description -->
+            {% if post.description %}
+            <div class="px-6 pb-6">
+              <p class="text-gray-300 leading-relaxed bg-white/5 rounded-lg p-4">{{ post.description }}</p>
+            </div>
+            {% endif %}
+          </div>
+          {% endfor %}
+          <!-- USER POSTS END HERE -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="py-20 bg-gradient-to-r from-purple-900/50 to-pink-900/50">
+      <div class="container mx-auto px-4 text-center">
+        <h2 class="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+          Ready to Get Started?
+        </h2>
+        <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+          Join thousands of creators and discover endless possibilities with Phoxia
+        </p>
+        <button onclick="window.location.href='/signup'" class="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-4 px-8 rounded-full text-lg transform hover:scale-105 transition-all duration-300 shadow-2xl hover:shadow-pink-500/25">
+          Join the Community
+        </button>
+      </div>
+    </section>
 
     <script src="{% static './script.js' %}"></script>
   </body>
