@@ -5,23 +5,34 @@ from django.shortcuts import get_object_or_404, render,redirect
 from  .models import Profile,Post
 from django.contrib.auth import authenticate,login ,logout
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+
 # Create your views here.
 def index(request):
     posts = Post.objects.filter(Q(profile__followers=request.user)) #&~Q(likes=request.user) )    
-    context = {"posts":posts}
+    profile = Profile.objects.get(user=request.user)
+    context = {"posts":posts,
+               "profile":profile,
+               "profile_user":True}
     # return render(request,'base.html',context)
     return render(request,'Index.html',context)
 
 #for login 
 def Login(request):
-     if request.method == 'POST':
-        username = request.POST ['username']
-        password = request.POST ['password']
-        user = authenticate(username=username,password=password)
-        if user : 
-            login(request,user)
-            return redirect("profile")    
-     return render(request,'Login.html')
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            messages.success(request, "Login successful.")
+            return redirect("profile")
+        else:
+            messages.error(request, "Invalid username or password.")
+            return redirect("Login")
+
+    return render(request, 'Login.html')
 
 
 #for create profile
@@ -78,6 +89,10 @@ def follow(request,id,username):
 
 #for uploading post 
 def upload_post(request):
+    profile = Profile.objects.get(user=request.user)
+    context = {
+               "profile":profile,
+               "profile_user":True}
     if request.method == 'POST':
         post = request.FILES['post']
         description = request.POST['description']
@@ -85,7 +100,7 @@ def upload_post(request):
         posts = Post.objects.create(user=request.user,Wallpaper=post,profile=profile,description=description)
         if posts:
             messages.success(request,'post uploaded')
-    return render(request,'uploadposts.html')
+    return render(request,'uploadposts.html',context)
 
 
 #for liking post

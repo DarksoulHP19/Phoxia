@@ -1,73 +1,68 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
-  {% load static %}
   <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <!-- Bootstrap CSS -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-      crossorigin="anonymous"
-    />
-    <link rel="stylesheet" href="{% static './css/index.css' %}" />
     <title>Upload Post</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static './css/index.css' %}" />
   </head>
-  <body>
-    {% include 'navbar.html' %} {% if messages %} {% for i in messages %}
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-      {{i}}
-      <button
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="alert"
-        aria-label="Close"
-      ></button>
+
+  <body class="bg-gray-100 text-gray-800">
+    {% include 'navbar.html' %}
+
+    <!-- Alert Messages -->
+    <div class="max-w-xl mx-auto px-4 pt-6">
+      {% if messages %}
+        {% for i in messages %}
+          <div class="bg-green-100 border border-green-300 text-green-800 px-4 py-2 mb-4 rounded relative">
+            {{ i }}
+            <button onclick="this.parentElement.remove()" class="absolute right-3 top-1 text-xl leading-none">&times;</button>
+          </div>
+        {% endfor %}
+      {% endif %}
     </div>
-    {% endfor %} {% endif %}
-    <form
-      class="container"
-      method="POST"
-      action=""
-      enctype="multipart/form-data"
-    >
-      {% csrf_token %}
-      <h1 class="text-center text-primary">Upload Post</h1>
-      <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Post</label>
-        <input
-          type="file"
-          name="post"
-        />
-      </div>
-      <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">description</label>
-        <input
-          type="textarea"
-          class="form-control"
-          name="description"
-        />
-      </div>
 
-      <button type="submit" class="btn btn-primary">Post</button>
-    </form>
+    <!-- Upload Form -->
+    <div class="max-w-xl mx-auto p-6 bg-white shadow rounded-lg mt-4">
+      <h1 class="text-2xl font-bold text-center mb-6 text-blue-700">Upload Post</h1>
 
-    <!-- Optional JavaScript; choose one of the two! -->
+      <form method="POST" enctype="multipart/form-data" class="space-y-6">
+        {% csrf_token %}
 
-    <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-      crossorigin="anonymous"
-    ></script>
+        <div>
+          <label for="post" class="block mb-1 font-medium text-gray-700">Upload File</label>
+          <input
+            type="file"
+            id="post"
+            name="post"
+            class="w-full bg-white border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+            required
+          />
+        </div>
 
-    <!-- Option 2: Separate Popper and Bootstrap JS -->
-    <!--
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
-    -->
+        <div>
+          <label for="description" class="block mb-1 font-medium text-gray-700">Description</label>
+          <textarea
+            id="description"
+            name="description"
+            rows="4"
+            class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+            placeholder="Enter a caption..."
+          ></textarea>
+        </div>
+
+        <button
+          type="submit"
+          class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700 transition"
+        >
+          Post
+        </button>
+      </form>
+    </div>
+
+    <script src="{% static './script.js' %}"></script>
   </body>
 </html>

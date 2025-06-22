@@ -1,25 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comment</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <form action="/blog/comment/" method="post" class="mb-6">
-          <input type="hidden" name="csrfmiddlewaretoken" value="4agwRu1sCw4uqM6tUE9e7riLpteeWwDRHIeGfNOr0vDZL7iVUvKTOIvigA3Rhpcy">
-          <div class="py-2 px-4 mb-4 shadow rounded-lg rounded-t-lg border-2 border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-            <label for="comment" class="sr-only">Your comment</label>
-            <textarea id="comment" name="comment" rows="6" class="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 dark:text-white dark:placeholder-gray-400 dark:bg-gray-800" placeholder="Write a comment..." required=""></textarea>
-          </div>
+<body class="bg-gray-100 text-gray-900">
 
-          <input type="hidden" name="slug" value="django-setup">
-          <input type="hidden" name="parent" value="">
-          <input type="hidden" name="username" value="nilesh">
-          <button type="submit" class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-green-600 rounded-lg focus:ring-4 focus:ring-green-200 dark:focus:ring-green-900 hover:bg-green-800">
-            Post comment
-          </button>
-        </form>
+  <div class="max-w-2xl mx-auto mt-10 px-4">
+    <form action="/blog/comment/" method="post" class="space-y-4">
+      <input type="hidden" name="csrfmiddlewaretoken" value="4agwRu1sCw4uqM6tUE9e7riLpteeWwDRHIeGfNOr0vDZL7iVUvKTOIvigA3Rhpcy" />
+      <input type="hidden" name="slug" value="django-setup" />
+      <input type="hidden" name="parent" value="" />
+      <input type="hidden" name="username" value="nilesh" />
+
+      <div class="bg-white shadow-md rounded-lg p-4">
+        <label for="comment" class="sr-only">Your comment</label>
+        <textarea
+          id="comment"
+          name="comment"
+          rows="6"
+          class="w-full text-sm border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none resize-y"
+          placeholder="Write a comment..."
+          required
+        ></textarea>
+      </div>
+
+      <button
+        type="submit"
+        class="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white text-sm font-semibold py-2.5 px-6 rounded-lg transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-green-200"
+      >
+        Post Comment
+      </button>
+    </form>
+  </div>
+
 </body>
 </html>
