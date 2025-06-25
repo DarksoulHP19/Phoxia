@@ -9,13 +9,34 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def index(request):
-    posts = Post.objects.filter(Q(profile__followers=request.user)) #&~Q(likes=request.user) )    
-    profile = Profile.objects.get(user=request.user)
-    context = {"posts":posts,
-               "profile":profile,
-               "profile_user":True}
-    # return render(request,'base.html',context)
-    return render(request,'Index.html',context)
+    context = {}
+    
+    if request.user.is_authenticated:
+        # User is logged in - show posts and profile
+        posts = Post.objects.filter(Q(profile__followers=request.user))
+        profile = Profile.objects.get(user=request.user)
+        context = {
+            "posts": posts,
+            "profile": profile,
+            "profile_user": True
+        }
+    else:
+        # User is not logged in - show promotional content only
+        context = {
+            "posts": [],
+            "profile": None,
+            "profile_user": False
+        }
+    
+    return render(request, 'Index.html', context)
+
+#for signup
+def home_view(request):
+    post = Post.objects.all().order_by('-id')[:6]  # Fetch the latest 6 posts
+    context = {
+        'posts': post,
+    }
+    return render(request, 'base.html', context)
 
 #for login 
 def Login(request):
@@ -27,7 +48,7 @@ def Login(request):
         if user is not None:
             login(request, user)
             messages.success(request, "Login successful.")
-            return redirect("profile")
+            return redirect("index")
         else:
             messages.error(request, "Invalid username or password.")
             return redirect("Login")
