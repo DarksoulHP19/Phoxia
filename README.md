@@ -40,3 +40,5 @@ It's a wallpaper app which  is  made  HTML,CSS,Javascript,Bootstrap-4 ,and as a 
     ```
 
 7. Open your browser and go to `http://127.0.0.1:8000/login` to view the app.
+
+-------------------
